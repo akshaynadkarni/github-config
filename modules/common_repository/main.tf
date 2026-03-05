@@ -79,8 +79,12 @@ resource "github_branch_protection" "repo_protection" {
     "osac-project/org-admins",
   ]
 
-  required_pull_request_reviews {
-    required_approving_review_count = var.required_approvals
+  dynamic "required_pull_request_reviews" {
+    for_each = var.required_approvals[*]
+
+    content {
+      required_approving_review_count = var.required_approvals
+    }
   }
 
   required_status_checks {
